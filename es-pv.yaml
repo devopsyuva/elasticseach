@@ -1,0 +1,50 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: efk-data-volume0
+  labels:
+    type: local
+spec:
+  storageClassName: nfs-class
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    path: /var/tmp/nfs-data/data0
+    server: 10.182.0.6
+    readOnly: false
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: efk-data-volume1
+  labels:
+    type: local
+spec:
+  storageClassName: nfs-class
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    path: /var/tmp/nfs-data/data1
+    server: 10.182.0.6
+    readOnly: false
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: efk-data-volume2
+  labels:
+    type: local
+spec:
+  storageClassName: nfs-class
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    path: /var/tmp/nfs-data/data2
+    server: 10.182.0.6
+    readOnly: false
