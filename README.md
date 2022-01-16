@@ -17,7 +17,7 @@
 # Once testing done, bring back the count to 3 as expected
 - kubectl scale --replicas=3 sts/elasticsearch
 ```
-- Sample output while creating Elasticsearch objects on kubernetes
+- Sample output while creating Elasticsearch objects(PV, Statefulset and Service) on kubernetes
 ```
 root@controlplanenode:~/elasticsearch# kubectl create -f es-pv.yaml 
 persistentvolume/efk-data-volume0 created
