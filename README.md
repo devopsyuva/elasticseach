@@ -74,3 +74,39 @@ NAME                             READY   AGE     CONTAINERS      IMAGES
 statefulset.apps/elasticsearch   3/3     5m30s   elasticsearch   docker.elastic.co/elasticsearch/elasticsearch:7.16.3
 root@controlplanenode:~/elasticsearch#
 ```
+
+- As part of log monitoring, lets deloy fluentd and kibana for visualization as mentioned below:
+```
+- kubectl apply -f fluentdv1.14.3/
+- kubectl apply -f kibanav7.16.3/
+```
+- Sample output of status when all EFK components run:
+```
+root@controlplanenode:~/elasticsearch# kubectl get all -o wide
+NAME                             READY   STATUS    RESTARTS      AGE   IP                NODE               NOMINATED NODE   READINESS GATES
+pod/elasticsearch-0              1/1     Running   0             30m   192.168.101.66    computeplaneone    <none>           <none>
+pod/elasticsearch-1              1/1     Running   0             30m   192.168.101.68    computeplaneone    <none>           <none>
+pod/elasticsearch-2              1/1     Running   0             30m   192.168.101.71    computeplaneone    <none>           <none>
+pod/fluentd-9h879                1/1     Running   0             27m   192.168.121.106   controlplanenode   <none>           <none>
+pod/fluentd-rq9wj                1/1     Running   0             27m   192.168.101.65    computeplaneone    <none>           <none>
+pod/kibana-7544cb96bf-45r7j      1/1     Running   0             22m   192.168.101.70    computeplaneone    <none>           <none>
+pod/static-web-computeplaneone   1/1     Running   8 (40m ago)   4d    192.168.101.97    computeplaneone    <none>           <none>
+
+NAME                    TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)             AGE   SELECTOR
+service/elasticsearch   ClusterIP   None          <none>        9200/TCP,9300/TCP   30m   app=elasticsearch
+service/kibana          NodePort    10.102.24.8   <none>        5601:31784/TCP      22m   app=kibana
+service/kubernetes      ClusterIP   10.96.0.1     <none>        443/TCP             6d    <none>
+
+NAME                     DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE   CONTAINERS   IMAGES                                                                        SELECTOR
+daemonset.apps/fluentd   2         2         2       2            2           <none>          27m   fluentd      fluent/fluentd-kubernetes-daemonset:v1.14.3-debian-elasticsearch7-amd64-1.0   app=fluentd
+
+NAME                     READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                                   SELECTOR
+deployment.apps/kibana   1/1     1            1           22m   kibana       docker.elastic.co/kibana/kibana:7.16.3   app=kibana
+
+NAME                                DESIRED   CURRENT   READY   AGE   CONTAINERS   IMAGES                                   SELECTOR
+replicaset.apps/kibana-7544cb96bf   1         1         1       22m   kibana       docker.elastic.co/kibana/kibana:7.16.3   app=kibana,pod-template-hash=7544cb96bf
+
+NAME                             READY   AGE   CONTAINERS      IMAGES
+statefulset.apps/elasticsearch   3/3     30m   elasticsearch   docker.elastic.co/elasticsearch/elasticsearch:7.16.3
+root@controlplanenode:~/elasticsearch#
+```
